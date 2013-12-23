@@ -76,10 +76,10 @@ return array(
     ),
     'params' => array(
         'twitter' => array(
-            'accessToken' => '38498935-KYJnReqoa2ep05kpgzsFTZCIVsDr8sLas7quGqt51',
-            'accessTokenSecret' => '2u2xdyVxwhncZrKsyznd5H1ggfT1ndQC5fYnd22dFxVLk',
-            'consumerKey' => '263Y69smSQAO7mOUpZxtmQ',
-            'consumerSecret' => 'frbD5oRte4Prq073rULMCEtIZMCe6kzAfuzdT69cxQ',
+            'accessToken' => '',
+            'accessTokenSecret' => '',
+            'consumerKey' => '',
+            'consumerSecret' => '',
         )
     ),
 );
