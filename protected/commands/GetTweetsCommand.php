@@ -46,8 +46,12 @@ class GetTweetsCommand extends CConsoleCommand
                             $getMore = false;
                         }
                     }
+                    var_dump('Found ' . count($tweetsJson['statuses']) . ' tweets of which ' . $newTweets . ' were new.');
                 }
-                var_dump('Found ' . count($tweetsJson['statuses']) . ' tweets of which ' . $newTweets . ' were new.');
+                else {
+                    var_dump($tweetsJson);
+                }
+
                 if (isset($tweetsJson['search_metadata']['next_results'])) {
                     $getField = $tweetsJson['search_metadata']['next_results'];
                     sleep(1);
