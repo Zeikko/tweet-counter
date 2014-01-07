@@ -3,7 +3,7 @@
 class GetTweetsCommand extends CConsoleCommand
 {
 
-    public function run()
+    public function run($args)
     {
         $settings = array(
             'oauth_access_token' => Yii::app()->params['twitter']['accessToken'],
@@ -31,6 +31,7 @@ class GetTweetsCommand extends CConsoleCommand
 
                 $tweetsJson = json_decode($tweets, true);
 
+                $newTweets = 0;
                 if (isset($tweetsJson['statuses'])) {
                     foreach ($tweetsJson['statuses'] as $tweetJson) {
                         $tweet = Tweet::model()->findByPk($tweetJson['id']);
@@ -40,12 +41,13 @@ class GetTweetsCommand extends CConsoleCommand
                             $tweet->getDataFromJson($tweetJson);
                             $tweet->search_phrase_id = $searchPhrase->id;
                             $tweet->save();
+                            $newTweets++;
                         } else {
                             $getMore = false;
                         }
                     }
                 }
-
+                var_dump('Found ' . count($tweetsJson['statuses']) . ' tweets of which ' . $newTweets . ' were new.');
                 if (isset($tweetsJson['search_metadata']['next_results'])) {
                     $getField = $tweetsJson['search_metadata']['next_results'];
                     sleep(1);

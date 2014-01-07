@@ -33,7 +33,7 @@ class Tweet extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, text, created_at, user_id, screen_name', 'required'),
-			array('created_at', 'numerical', 'integerOnly'=>true),
+			array('created_at, retweet_count, favorite_count', 'numerical', 'integerOnly'=>true),
 			array('id, screen_name', 'length', 'max'=>20),
 			array('text', 'length', 'max'=>160),
 			array('geo_lat, geo_long, user_id', 'length', 'max'=>10),
