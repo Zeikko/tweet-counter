@@ -126,4 +126,9 @@ class Tweet extends CActiveRecord
             $this->name = $json['user']['name'];
             $this->profile_image_url = $json['user']['profile_image_url'];
         }
+        
+        public static function toReadable($tweet) {
+            $tweet['created_at'] = date('c', $tweet['created_at']);
+            return $tweet;
+        }
 }
