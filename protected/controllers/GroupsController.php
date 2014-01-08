@@ -49,6 +49,7 @@ class GroupsController extends ApiController
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
                 WHERE  `group`.name = :group
                 AND tweet.created_at > :from
+                AND tweet.retweet = 0
                 ORDER BY retweet_count + favorite_count DESC
                 LIMIT ' . $number;
         $command = Yii::app()->db->createCommand($sql);
@@ -57,6 +58,12 @@ class GroupsController extends ApiController
             ':from' => $from,
         ));
         $tweets = $command->queryAll();
+        usort($tweets, function($a, $b) {
+            if($a['created_at'] == $b['created_at']) {
+                return 0;
+            }
+            return ($a['created_at'] < $b['created_at']) ? 1 : -1;
+        });
         foreach($tweets as &$tweet) {
             $tweet = Tweet::toReadable($tweet);
         }

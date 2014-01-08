@@ -35,20 +35,29 @@ class GetTweetsCommand extends CConsoleCommand
                 if (isset($tweetsJson['statuses'])) {
                     foreach ($tweetsJson['statuses'] as $tweetJson) {
                         $tweet = Tweet::model()->findByPk($tweetJson['id']);
+                        //Save tweet
                         if (!$tweet) {
                             $getMore = true;
                             $tweet = new Tweet();
                             $tweet->getDataFromJson($tweetJson);
                             $tweet->search_phrase_id = $searchPhrase->id;
-                            $tweet->save();
+                            $tweet->retweet = 0;
                             $newTweets++;
                         } else {
                             $getMore = false;
                         }
+                        //Update retweets of the original tweet
+                        if (isset($tweetJson['retweeted_status'])) {
+                            $originalTweet = Tweet::model()->findByPk($tweetJson['retweeted_status']['id']);
+                            if ($originalTweet) {
+                                $originalTweet->retweet_count = $tweetJson['retweet_count'];
+                            }
+                            $tweet->retweet = 1;
+                        }
+                        $tweet->save();
                     }
                     var_dump('Found ' . count($tweetsJson['statuses']) . ' tweets of which ' . $newTweets . ' were new.');
-                }
-                else {
+                } else {
                     var_dump($tweetsJson);
                 }
 
