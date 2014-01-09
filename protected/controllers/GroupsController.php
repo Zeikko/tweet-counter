@@ -3,13 +3,13 @@
 class GroupsController extends ApiController
 {
 
-    public function actionTweetCounts($group, $from, $to)
+    public function actionTweetCounts($groups, $from, $to)
     {
+        $tweetsOfGroups = array();
+        $groups = explode(',', $groups);
         $from = strtotime($from);
         $to = strtotime($to);
-
         date_default_timezone_set('UTC');
-
         $sql = 'SELECT COUNT( tweet.id ) AS tweet_count, created_at + 2 * 60 * 60 AS time
                 FROM  `tweet` 
                 LEFT JOIN search_phrase ON search_phrase.id = tweet.search_phrase_id
@@ -18,26 +18,29 @@ class GroupsController extends ApiController
                 AND tweet.created_at > :from
                 GROUP BY YEAR( FROM_UNIXTIME( created_at ) ) , DAY( FROM_UNIXTIME( created_at ) )
                 ORDER BY created_at ASC';
-        $command = Yii::app()->db->createCommand($sql);
-        $command->execute(array(
-            ':group' => $group,
-            ':from' => $from,
-        ));
-        $tweets = $command->queryAll();
-        $tweets = $this->valuesToJson($tweets, $from, $to, 'time', 'tweet_count');
-        $this->outputJson(array(
-            'group' => $group,
-            'tweets' => $tweets,
-        ));
+        foreach ($groups as $group) {
+            $command = Yii::app()->db->createCommand($sql);
+            $command->execute(array(
+                ':group' => $group,
+                ':from' => $from,
+            ));
+            $tweets = $command->queryAll();
+            $tweets = $this->valuesToJson($tweets, $from, $to, 'time', 'tweet_count');
+            $tweetsOfGroups[] = array(
+                'group' => $group,
+                'tweets' => $tweets,
+            );
+        }
+        $this->outputJson($tweetsOfGroups);
     }
 
     public function actionTopTweets($group, $from, $to, $number)
     {
         $number = intval($number);
-        if(!$number) {
-           throw new CHttpException('Number has to be integer'); 
+        if (!$number) {
+            throw new CHttpException('Number has to be integer');
         }
-        
+
         $from = strtotime($from);
         $to = strtotime($to);
 
@@ -59,12 +62,12 @@ class GroupsController extends ApiController
         ));
         $tweets = $command->queryAll();
         usort($tweets, function($a, $b) {
-            if($a['created_at'] == $b['created_at']) {
-                return 0;
-            }
-            return ($a['created_at'] < $b['created_at']) ? 1 : -1;
-        });
-        foreach($tweets as &$tweet) {
+                    if ($a['created_at'] == $b['created_at']) {
+                        return 0;
+                    }
+                    return ($a['created_at'] < $b['created_at']) ? 1 : -1;
+                });
+        foreach ($tweets as &$tweet) {
             $tweet = Tweet::toReadable($tweet);
         }
         $this->outputJson(array(
