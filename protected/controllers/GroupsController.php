@@ -46,7 +46,7 @@ class GroupsController extends ApiController
 
         date_default_timezone_set('UTC');
 
-        $sql = 'SELECT tweet.*, created_at + 2 * 60 * 60 AS created_at
+        $sql = 'SELECT tweet.*, created_at AS created_at
                 FROM  `tweet` 
                 LEFT JOIN search_phrase ON search_phrase.id = tweet.search_phrase_id
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
