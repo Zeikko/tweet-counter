@@ -16,7 +16,7 @@ class GroupsController extends ApiController
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
                 WHERE  `group`.name = :group
                 AND tweet.created_at > :from
-                GROUP BY YEAR( FROM_UNIXTIME( created_at ) ) , DAY( FROM_UNIXTIME( created_at ) )
+                GROUP BY YEAR( FROM_UNIXTIME( created_at ) ), DAY( FROM_UNIXTIME( created_at )), HOUR( FROM_UNIXTIME( created_at ) )
                 ORDER BY created_at ASC';
         foreach ($groups as $group) {
             $command = Yii::app()->db->createCommand($sql);
