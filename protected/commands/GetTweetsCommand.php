@@ -15,6 +15,12 @@ class GetTweetsCommand extends CConsoleCommand
         $searchPhrases = SearchPhrase::model()->findAll();
         foreach ($searchPhrases as $searchPhrase) {
 
+            /*
+             * @TODO
+             * Check the latest Tweet for the current search phrase and set since_id to the ID of that Tweet for the Twitter request
+             * Create many to many relationship between search phrases and tweets since one tweet can match many search phrases
+            */
+            
             $url = 'https://api.twitter.com/1.1/search/tweets.json';
             $getField = '?q=' . urlencode($searchPhrase->search_phrase) . '&count=100';
             $requestMethod = 'GET';
