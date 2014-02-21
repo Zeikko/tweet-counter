@@ -30,7 +30,7 @@ class ApiController extends Controller
                         $valueKey => $values[$i][$valueKey],
                     );
                     if ($interval == 'hour') {
-                        $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . (date('H') + 2) . ':00:00' . date('P', $values[$i][$timestampKey]);
+                        $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . (date('H', $values[$i][$timestampKey]) + 2) . ':00:00' . date('P', $values[$i][$timestampKey]);
                     } else {
                         $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . '00:00:00' . date('P', $values[$i][$timestampKey]);
                     }
@@ -39,7 +39,7 @@ class ApiController extends Controller
                 } else {
                     $allValues[] = 0;
                     if ($interval == 'hour') {
-                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . (date('H') + 2) . ':00:00' . date('P', $start), $valueKey => 0);
+                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . (date('H', $start) + 2) . ':00:00' . date('P', $start), $valueKey => 0);
                     } else {
                         $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
                     }
@@ -47,7 +47,7 @@ class ApiController extends Controller
             } else {
                 $allValues[] = 0;
                 if ($interval == 'hour') {
-                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . (date('H') + 2) . ':00:00' . date('P', $start), $valueKey => 0);
+                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . (date('H', $start) + 2) . ':00:00' . date('P', $start), $valueKey => 0);
                 } else {
                     $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
                 }
