@@ -6,14 +6,16 @@ class ApiController extends Controller
     public static function valuesToJson($values, $from, $to, $timestampKey = 'timestamp', $valueKey = 'value', $interval)
     {
         $tickInterval = 24 * 3600;
-        if($interval == 'hour') {
+        if ($interval == 'hour') {
             $tickInterval = 3600;
+        } else {
+            $start = $from;
+            $start = floor($start / $tickInterval) * $tickInterval;
         }
         $allValues = array();
         $valuesHistory = array();
 
-        $start = $from;
-        $start = floor($start / $tickInterval) * $tickInterval;
+
 
         $i = 0;
 
@@ -26,7 +28,7 @@ class ApiController extends Controller
                         $valueKey => $values[$i][$valueKey],
                     );
                     if ($interval == 'hour') {
-                        $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey])  . 'T' . (date('H') + 2) . ':00:00' . date('P', $values[$i][$timestampKey]);
+                        $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . (date('H') + 2) . ':00:00' . date('P', $values[$i][$timestampKey]);
                     } else {
                         $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . '00:00:00' . date('P', $values[$i][$timestampKey]);
                     }
@@ -35,7 +37,7 @@ class ApiController extends Controller
                 } else {
                     $allValues[] = 0;
                     if ($interval == 'hour') {
-                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start)  . 'T' . (date('H') + 2) . ':00:00' . date('P', $start), $valueKey => 0);
+                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . (date('H') + 2) . ':00:00' . date('P', $start), $valueKey => 0);
                     } else {
                         $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
                     }
