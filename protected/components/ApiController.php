@@ -39,7 +39,7 @@ class ApiController extends Controller
                 } else {
                     $allValues[] = 0;
                     if ($interval == 'hour') {
-                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . date('H', $start) . ':00:00' . date('P', $start), $valueKey => 0);
+                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . date('H', $start + 3600) . ':00:00' . date('P', $start), $valueKey => 0);
                     } else {
                         $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
                     }
@@ -47,7 +47,7 @@ class ApiController extends Controller
             } else {
                 $allValues[] = 0;
                 if ($interval == 'hour') {
-                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . date('H', $start) . ':00:00' . date('P', $start), $valueKey => 0);
+                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . date('H', $start + 3600) . ':00:00' . date('P', $start), $valueKey => 0);
                 } else {
                     $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
                 }
