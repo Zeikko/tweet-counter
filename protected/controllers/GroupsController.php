@@ -3,7 +3,7 @@
 class GroupsController extends ApiController
 {
 
-    public function actionTweetCounts($groups, $from, $to)
+    public function actionTweetCounts($groups, $from, $to, $interval = 'day')
     {
         $tweetsOfGroups = array();
         $groups = explode(',', $groups);
@@ -15,9 +15,12 @@ class GroupsController extends ApiController
                 LEFT JOIN search_phrase ON search_phrase.id = tweet.search_phrase_id
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
                 WHERE  `group`.name = :group
-                AND tweet.created_at > :from
-                GROUP BY YEAR(FROM_UNIXTIME(created_at )), MONTH(FROM_UNIXTIME(created_at)), DAY(FROM_UNIXTIME(created_at))
-                ORDER BY created_at ASC';
+                AND tweet.created_at > :from ';
+        $sql .= 'GROUP BY YEAR(FROM_UNIXTIME(created_at )), MONTH(FROM_UNIXTIME(created_at)), DAY(FROM_UNIXTIME(created_at)) ';
+        if($interval == 'hour') {
+            $sql .= 'HOUR(FROM_UNIXTIME(created_at)) ';
+        }
+        $sql .= 'ORDER BY created_at ASC ';
         foreach ($groups as $group) {
             $command = Yii::app()->db->createCommand($sql);
             $command->execute(array(
@@ -25,7 +28,7 @@ class GroupsController extends ApiController
                 ':from' => $from,
             ));
             $tweets = $command->queryAll();
-            $tweets = $this->valuesToJson($tweets, $from, $to, 'time', 'tweet_count');
+            $tweets = $this->valuesToJson($tweets, $from, $to, 'time', 'tweet_count', $interval);
             $tweetsOfGroups[] = array(
                 'group' => $group,
                 'tweets' => $tweets,

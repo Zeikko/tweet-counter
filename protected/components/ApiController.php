@@ -3,7 +3,7 @@
 class ApiController extends Controller
 {
 
-    public static function valuesToJson($values, $from, $to, $timestampKey = 'timestamp', $valueKey = 'value')
+    public static function valuesToJson($values, $from, $to, $timestampKey = 'timestamp', $valueKey = 'value', $interval)
     {
         $tickInterval = 24 * 3600;
         $allValues = array();
@@ -20,18 +20,30 @@ class ApiController extends Controller
                 if ($timestamp >= $start && $timestamp < $start + $tickInterval) {
                     $allValues[] = $values[$i][$valueKey];
                     $valuesCell = array(
-                        $timestampKey => date('Y-m-d', $values[$i][$timestampKey]) . 'T' . '00:00:00' . date('P', $values[$i][$timestampKey]),
                         $valueKey => $values[$i][$valueKey],
                     );
+                    if ($interval == 'hour') {
+                        $valuesCell[$timestampKey] = date('c', $values[$i][$timestampKey]) . date('P', $values[$i][$timestampKey]);
+                    } else {
+                        $valuesCell[$timestampKey] = date('Y-m-d', $values[$i][$timestampKey]) . 'T' . '00:00:00' . date('P', $values[$i][$timestampKey]);
+                    }
                     $valuesHistory[] = $valuesCell;
                     $i++;
                 } else {
                     $allValues[] = 0;
-                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
+                    if ($interval == 'hour') {
+                        $valuesHistory[] = array($timestampKey => date('c', $start) . date('P', $start), $valueKey => 0);
+                    } else {
+                        $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
+                    }
                 }
             } else {
                 $allValues[] = 0;
-                $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
+                if ($interval == 'hour') {
+                    $valuesHistory[] = array($timestampKey => date('c', $start) . date('P', $start), $valueKey => 0);
+                } else {
+                    $valuesHistory[] = array($timestampKey => date('Y-m-d', $start) . 'T' . '00:00:00' . date('P', $start), $valueKey => 0);
+                }
             }
 
             $start += $tickInterval;
