@@ -67,7 +67,12 @@ class ApiController extends Controller
     public function outputJson($output)
     {
         $this->toInteger($output);
-        header('Content-Type: application/json');
+        if (isset($_GET['callback'])) {
+            header('Content-Type: text/javascript');
+            $output = $_GET['callback'] . '(' . $output . ');';
+        } else {
+            header('Content-Type: application/json');
+        }
         echo CJSON::encode($output);
     }
 
