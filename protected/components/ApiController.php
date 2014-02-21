@@ -5,11 +5,13 @@ class ApiController extends Controller
 
     public static function valuesToJson($values, $from, $to, $timestampKey = 'timestamp', $valueKey = 'value', $interval)
     {
+        $start = $from;
+
         $tickInterval = 24 * 3600;
         if ($interval == 'hour') {
             $tickInterval = 3600;
         } else {
-            $start = $from;
+
             $start = floor($start / $tickInterval) * $tickInterval;
         }
         $allValues = array();
