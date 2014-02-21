@@ -18,7 +18,7 @@ class GroupsController extends ApiController
                 AND tweet.created_at > :from ';
         $sql .= 'GROUP BY YEAR(FROM_UNIXTIME(created_at )), MONTH(FROM_UNIXTIME(created_at)), DAY(FROM_UNIXTIME(created_at)) ';
         if($interval == 'hour') {
-            $sql .= 'HOUR(FROM_UNIXTIME(created_at)) ';
+            $sql .= ', HOUR(FROM_UNIXTIME(created_at)) ';
         }
         $sql .= 'ORDER BY created_at ASC ';
         foreach ($groups as $group) {
