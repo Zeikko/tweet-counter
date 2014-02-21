@@ -24,7 +24,7 @@ class ApiController extends Controller
         while ($start < $to) {
             if (isset($values[$i])) {
                 $timestamp = $values[$i][$timestampKey];
-                if ($timestamp >= $start && $timestamp < $start + $tickInterval + 2) {
+                if ($timestamp >= $start && $timestamp < $start + $tickInterval + 2 * 3600) {
                     $allValues[] = $values[$i][$valueKey];
                     $valuesCell = array(
                         $valueKey => $values[$i][$valueKey],
