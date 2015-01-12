@@ -17,14 +17,11 @@ class ApiController extends Controller
         $allValues = array();
         $valuesHistory = array();
 
-
-
         $i = 0;
-
-        while ($start < $to) {
+        while ($start < $to && $start <= time()) {
             if (isset($values[$i])) {
                 $timestamp = $values[$i][$timestampKey];
-                if ($timestamp >= $start && $timestamp < $start + $tickInterval + 2 * 3600) {
+                if ($timestamp >= $start && $timestamp < $start + $tickInterval) {
                     $allValues[] = $values[$i][$valueKey];
                     $valuesCell = array(
                         $valueKey => $values[$i][$valueKey],
