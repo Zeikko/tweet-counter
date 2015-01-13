@@ -12,7 +12,8 @@ class GroupsController extends ApiController
         date_default_timezone_set('UTC');
         $sql = 'SELECT COUNT( tweet.id ) AS tweet_count, created_at + 2 * 60 * 60 AS time
                 FROM  `tweet` 
-                LEFT JOIN search_phrase ON search_phrase.id = tweet.search_phrase_id
+		LEFT JOIN search_phrase_in_tweet ON tweet.id = search_phrase_in_tweet.tweet_id
+                LEFT JOIN search_phrase ON search_phrase.id = search_phrase_in_tweet.search_phrase_id
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
                 WHERE  `group`.name = :group
                 AND tweet.created_at > :from ';
@@ -51,7 +52,8 @@ class GroupsController extends ApiController
 
         $sql = 'SELECT tweet.*, created_at AS created_at
                 FROM  `tweet` 
-                LEFT JOIN search_phrase ON search_phrase.id = tweet.search_phrase_id
+		LEFT JOIN search_phrase_in_tweet ON tweet.id = search_phrase_in_tweet.tweet_id
+                LEFT JOIN search_phrase ON search_phrase.id = search_phrase_in_tweet.search_phrase_id
                 LEFT JOIN  `group` ON group.id = search_phrase.group_id
                 WHERE  `group`.name = :group
                 AND tweet.created_at > :from

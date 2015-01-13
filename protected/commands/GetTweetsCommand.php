@@ -60,6 +60,17 @@ class GetTweetsCommand extends CConsoleCommand
                                 $tweet->retweet = 1;
                             }
                             $tweet->save();
+
+                            $searchPhraseInTweet = SearchPhraseInTweet::model()->findByAttributes(array(
+                                'tweet_id' => $tweet->id,
+                                'search_phrase_id' => $searchPhrase->id
+                            ));
+                            if(!$searchPhraseInTweet) {
+                                $searchPhraseInTweet = new SearchPhraseInTweet();
+                                $searchPhraseInTweet->tweet_id = $tweet->id;
+                                $searchPhraseInTweet->search_phrase_id = $searchPhrase->id;
+                                $searchPhraseInTweet->save();
+                            }
                         }
                         var_dump('Found ' . count($tweetsJson['statuses']) . ' tweets of which ' . $newTweets . ' were new.');
                     } else {
