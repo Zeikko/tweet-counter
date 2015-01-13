@@ -23,4 +23,3 @@ class m150112_091148_add_active_attribute extends CDbMigration
 	}
 	*/
 }
-ALTER TABLE  `tweet` CHANGE  `id`  `id` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ;
